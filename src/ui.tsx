@@ -29,25 +29,9 @@ function Plugin() {
     },
     [code]
   );
-  // Patch to make `react-simple-code-editor` compatible with Preact
   useEffect(
     function () {
-      const containerElement = containerElementRef.current;
-      if (containerElement === null) {
-        return;
-      }
-      const textAreaElement = containerElement.querySelector("textarea");
-      if (textAreaElement === null) {
-        return;
-      }
-      textAreaElement.textContent = code;
-      const preElement = containerElement.querySelector("pre");
-      if (preElement === null) {
-        return;
-      }
-      if (textAreaElement.nextElementSibling !== preElement) {
-        textAreaElement.after(preElement);
-      }
+      parent.postMessage({ pluginMessage: { type: "load" } }, "*");
     },
     [code]
   );
