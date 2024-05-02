@@ -23,26 +23,26 @@ import { InsertCodeHandler } from "./types";
 function Plugin() {
   const [code, setCode] = useState(`function add(a, b) {\n  return a + b;\n}`);
   const containerElementRef: RefObject<HTMLDivElement> = useRef(null);
-  const handleInsertCodeButtonClick = useCallback(
-    function () {
-      console.log("Hello");
+  const handleTranslate = useCallback(
+    function (selectedLanguage: string) {
+      console.log("selectedLanguage", selectedLanguage);
       // emit<InsertCodeHandler>('INSERT_CODE', code)
     },
     [code]
   );
-  useEffect(
-    function () {
-      async function fetchData() {
-        const response = await fetch(
-          "https://deepl-translation-proxy-git-feat-f136b4-ishida-daikis-projects.vercel.app"
-        );
-        const data = await response.json();
-        console.log(data);
-      }
-      fetchData();
-    },
-    [code]
-  );
+  // useEffect(
+  //   function () {
+  //     async function fetchData() {
+  //       const response = await fetch(
+  //         "https://deepl-translation-proxy-git-feat-f136b4-ishida-daikis-projects.vercel.app"
+  //       );
+  //       const data = await response.json();
+  //       console.log(data);
+  //     }
+  //     fetchData();
+  //   },
+  //   [code]
+  // );
 
   // Dropdown の選択肢を作成
   const language = [
@@ -102,7 +102,7 @@ function Plugin() {
       <VerticalSpace space="medium" />
       <Dropdown onChange={handleChange} options={options} value={value} />
       <VerticalSpace space="small" />
-      <Button disabled={value === null} fullWidth onClick={handleInsertCodeButtonClick}>
+      <Button disabled={value === null} fullWidth onClick={() => value && handleTranslate(value)}>
         Translate
       </Button>
       <VerticalSpace space="large" />
