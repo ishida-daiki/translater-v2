@@ -6,6 +6,7 @@ import {
   Dropdown,
   DropdownOption,
   render,
+  Text,
   SearchTextbox,
   SelectableItem,
   VerticalSpace,
@@ -42,7 +43,8 @@ function Plugin() {
     },
     [code]
   );
-  const [value, setValue] = useState<null | string>(null);
+
+  // Dropdown の選択肢を作成
   const language = [
     "アラビア語",
     "チェコ",
@@ -78,20 +80,32 @@ function Plugin() {
   const options: Array<DropdownOption> = language.map((value) => ({
     value: value,
   }));
+
+  // 選択した言語をDropdownで表示
+  const [value, setValue] = useState<null | string>(null);
   function handleChange(event: JSX.TargetedEvent<HTMLInputElement>) {
     const newValue = event.currentTarget.value;
     setValue(newValue);
   }
+  
+  // CSS in JS
+  const title = {
+    fontSize: '0.75rem',
+    display: 'flex',
+    alignPtems: 'center',
+  }
 
   return (
     <Container space="medium">
+      <VerticalSpace space="large" />
+      <Text style={title}>翻訳する言語を選択してください</Text>
       <VerticalSpace space="medium" />
       <Dropdown onChange={handleChange} options={options} value={value} />
       <VerticalSpace space="small" />
-      <Button fullWidth onClick={handleInsertCodeButtonClick}>
+      <Button disabled={value === null} fullWidth onClick={handleInsertCodeButtonClick}>
         Translate
       </Button>
-      <VerticalSpace space="small" />
+      <VerticalSpace space="large" />
     </Container>
   );
 }
