@@ -31,47 +31,55 @@ function Plugin() {
   );
   useEffect(
     function () {
-      parent.postMessage({ pluginMessage: { type: "load" } }, "*");
+      async function fetchData() {
+        const response = await fetch(
+          "https://deepl-translation-proxy-git-feat-f136b4-ishida-daikis-projects.vercel.app"
+        );
+        const data = await response.json();
+        console.log(data);
+      }
+      fetchData();
     },
     [code]
   );
   const [value, setValue] = useState<null | string>(null);
-  const options: Array<DropdownOption> = [
-    {
-      value: "English",
-    },
-    {
-      value: "Japanese",
-    },
-    {
-      value: "Spanish",
-    },
-    {
-      value: "French",
-    },
-    {
-      value: "German",
-    },
-    {
-      value: "Italian",
-    },
-    {
-      value: "Dutch",
-    },
-    {
-      value: "Polish",
-    },
-    "-",
-    {
-      header: "Header",
-    },
-    {
-      value: "qux",
-    },
+  const language = [
+    "アラビア語",
+    "チェコ",
+    "ラトビア",
+    "イタリア",
+    "デンマーク",
+    "リトアニア",
+    "インドネシア",
+    "ドイツ",
+    "ルーマニア",
+    "ウクライナ",
+    "トルコ",
+    "ロシア",
+    "エストニア",
+    "ノルウェー",
+    "英",
+    "オランダ",
+    "ハンガリー",
+    "韓国",
+    "ギリシャ",
+    "フィンランド",
+    "中国",
+    "スウェーデン",
+    "フランス",
+    "日本",
+    "スペイン",
+    "ブルガリア",
+    "スロバキア",
+    "ポーランド",
+    "スロベニア",
+    "ポルトガル",
   ];
+  const options: Array<DropdownOption> = language.map((value) => ({
+    value: value,
+  }));
   function handleChange(event: JSX.TargetedEvent<HTMLInputElement>) {
     const newValue = event.currentTarget.value;
-    console.log(newValue);
     setValue(newValue);
   }
 
