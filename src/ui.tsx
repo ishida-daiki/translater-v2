@@ -11,7 +11,6 @@ import {
   SelectableItem,
   VerticalSpace,
 } from "@create-figma-plugin/ui";
-import { emit } from "@create-figma-plugin/utilities";
 import { h, JSX, RefObject } from "preact";
 import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { highlight, languages } from "prismjs";
@@ -21,28 +20,12 @@ import styles from "./styles.css";
 import { InsertCodeHandler } from "./types";
 
 function Plugin() {
-  const [code, setCode] = useState(`function add(a, b) {\n  return a + b;\n}`);
-  const containerElementRef: RefObject<HTMLDivElement> = useRef(null);
-  const handleTranslate = useCallback(
-    function (selectedLanguage: string) {
-      console.log("selectedLanguage", selectedLanguage);
-      // emit<InsertCodeHandler>('INSERT_CODE', code)
-    },
-    [code]
-  );
-  // useEffect(
-  //   function () {
-  //     async function fetchData() {
-  //       const response = await fetch(
-  //         "https://deepl-translation-proxy-git-feat-f136b4-ishida-daikis-projects.vercel.app"
-  //       );
-  //       const data = await response.json();
-  //       console.log(data);
-  //     }
-  //     fetchData();
-  //   },
-  //   [code]
-  // );
+  const handleTranslate = useCallback((selectedLanguage: string) => {
+    if (selectedLanguage !== null) {
+      // FigmaのプラグインAPIを使用してメインスクリプトにメッセージを送信
+      parent.postMessage({ pluginMessage: { type: "translate", lang: selectedLanguage } }, '*');
+    }
+  }, []);
 
   // Dropdown の選択肢を作成
   const language = [
@@ -87,22 +70,26 @@ function Plugin() {
     const newValue = event.currentTarget.value;
     setValue(newValue);
   }
-  
+
   // CSS in JS
   const title = {
-    fontSize: '0.75rem',
-    display: 'flex',
-    alignPtems: 'center',
-  }
-
+    fontSize: "0.75rem",
+    display: "flex",
+    alignPtems: "center",
+  };
   return (
     <Container space="medium">
+      <Text style={title}>選択した要素</Text>
       <VerticalSpace space="large" />
-      <Text style={title}>翻訳する言語を選択してください</Text>
+      <Text style={title}>翻訳後の言語を選択してください</Text>
       <VerticalSpace space="medium" />
       <Dropdown onChange={handleChange} options={options} value={value} />
       <VerticalSpace space="small" />
-      <Button disabled={value === null} fullWidth onClick={() => value && handleTranslate(value)}>
+      <Button
+        disabled={value === null}
+        fullWidth
+        onClick={() => value && handleTranslate(value)}
+      >
         Translate
       </Button>
       <VerticalSpace space="large" />

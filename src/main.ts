@@ -15,10 +15,7 @@ function findAllTextNodes(nodes: ReadonlyArray<SceneNode>): Array<TextNode> {
 }
 
 export default function () {
-  figma.ui.onmessage = async (msg) => {
-    if (msg.type === "load") {
-    }
-  };
+  // 選択した要素のテキストノードを取得
   figma.on("selectionchange", () => {
     const selection = figma.currentPage.selection;
     
@@ -34,10 +31,15 @@ export default function () {
         name: node.name,
         characters: node.characters
       }));
-      console.log(textNodesContent);
       figma.ui.postMessage({ type: "update-text-nodes", textNodes: textNodesContent });
     }
   });
+  // プラグインUIからのメッセージを受信
+  figma.ui.onmessage = async (pluginMessage) => {
+    if (pluginMessage.type === "translate") {
+      console.log(pluginMessage.lang);
+    }
+  };
   // once<InsertCodeHandler>('INSERT_CODE', async function (code: string) {
   //   const text = figma.createText()
   //   await loadFontsAsync([text])
