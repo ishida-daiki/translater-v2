@@ -37,7 +37,7 @@ export default function () {
         name: node.name,
         characters: node.characters
       }));
-      console.log(textNodesContent);
+      figma.ui.postMessage({ type: "element-selected" });
     }
   });
   // プラグインUIからのメッセージを受信

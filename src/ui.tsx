@@ -20,6 +20,21 @@ import styles from "./styles.css";
 import { InsertCodeHandler } from "./types";
 
 function Plugin() {
+  // 要素を選択したかどうかの状態
+  const [content, setContent] = useState<boolean>(false);
+  useEffect(() => {
+    window.onmessage = (event) => {
+      const message = event.data.pluginMessage;
+      switch (message.type) {
+        // 選択した要素関連メッセージ
+        case "element-selected":
+          setContent(true);
+          break;
+      }
+    };
+  }, [content]);
+  
+  // 翻訳処理
   const handleTranslate = useCallback((selectedLanguage: string) => {
     if (selectedLanguage !== null) {
       // FigmaのプラグインAPIを使用してメインスクリプトにメッセージを送信
@@ -86,7 +101,7 @@ function Plugin() {
       <Dropdown onChange={handleChange} options={options} value={value} />
       <VerticalSpace space="small" />
       <Button
-        disabled={value === null}
+        disabled={value === null || content === false}
         fullWidth
         onClick={() => value && handleTranslate(value)}
       >
