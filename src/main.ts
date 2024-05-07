@@ -14,6 +14,12 @@ function findAllTextNodes(nodes: ReadonlyArray<SceneNode>): Array<TextNode> {
   return textNodes;
 }
 
+let textNodesContent: {
+  id: string;
+  name: string;
+  characters: string;
+}[]
+
 export default function () {
   // 選択した要素のテキストノードを取得
   figma.on("selectionchange", () => {
@@ -26,18 +32,18 @@ export default function () {
       // 選択中の全てのテキストノードを取得
       const allTextNodes = findAllTextNodes(selection);
       // 取得したテキストノードの情報をUIに送信
-      const textNodesContent = allTextNodes.map(node => ({
+      textNodesContent = allTextNodes.map(node => ({
         id: node.id,
         name: node.name,
         characters: node.characters
       }));
-      figma.ui.postMessage({ type: "update-text-nodes", textNodes: textNodesContent });
+      console.log(textNodesContent);
     }
   });
   // プラグインUIからのメッセージを受信
   figma.ui.onmessage = async (pluginMessage) => {
     if (pluginMessage.type === "translate") {
-      console.log(pluginMessage.lang);
+      const textNodes = figma.currentPage.selection;
     }
   };
   // once<InsertCodeHandler>('INSERT_CODE', async function (code: string) {
