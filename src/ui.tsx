@@ -80,10 +80,10 @@ function Plugin() {
   }));
 
   // 選択した言語をDropdownで表示
-  const [value, setValue] = useState<null | string>(null);
+  const [lang, setTranslateLang] = useState<null | string>(null);
   function handleChange(event: JSX.TargetedEvent<HTMLInputElement>) {
     const newValue = event.currentTarget.value;
-    setValue(newValue);
+    setTranslateLang(newValue);
   }
 
   // CSS in JS
@@ -98,12 +98,12 @@ function Plugin() {
       <VerticalSpace space="large" />
       <Text style={title}>翻訳後の言語を選択してください</Text>
       <VerticalSpace space="medium" />
-      <Dropdown onChange={handleChange} options={options} value={value} />
+      <Dropdown onChange={handleChange} options={options} value={lang} />
       <VerticalSpace space="small" />
       <Button
-        disabled={value === null || content === false}
+        disabled={lang === null || content === false}
         fullWidth
-        onClick={() => value && handleTranslate(value)}
+        onClick={() => lang && handleTranslate(lang)}
       >
         Translate
       </Button>
